@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        {% for item in wishlist_items %}
+        <form method="post" action="{% url 'wishlist' %}">
+            {% csrf_token %}
+            <input type="hidden" name="wishlist_item_id" value="{{ item.id }}">
+            <p>Product name: {{item.product.name}}</p>
+            <button type="submit">Remove from wishlist</button>
+        </form>
+        {% endfor %}
+    </div>
+    <script>
+        window.onload = function() {
+            window.history.pushState("", "", "/");
+        }
+    </script>
+</body>
+</html>

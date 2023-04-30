@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+    <div>
+        <a href="{% url 'cart' %}">Cart</a>
+        <a href="{% url 'wishlist' %}">Wishlist</a>
+    </div>  
+    <form action="{% url 'index' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="search_form" value="true">
+        <input type="text" name="q" placeholder="Search products...">
+        <button type="submit">Search</button>
+    </form>
+    <form action="{% url 'index' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="filter_form" value="true">
+        <label for="sort-by">Sort by:</label>
+        <select name="sort-by" id="sort-by">
+          <option value="low_to_high">Price: Low to high</option>
+          <option value="high_to_low">Price: High to low</option>
+        </select>
+        <button type="submit">Filter</button>
+      </form>
+    {% if filtered_products %}
+        <div class="d-flex flex-row m-5">
+            {% for filtered_product in filtered_products %}
+            <div class="border border-black m-3" id="product-{{ filtered_product.pk }}">
+                <a href="{% url 'detail' filtered_product.pk %}"><p>{{filtered_product.name}}</p></a>
+                <p>${{filtered_product.price}}</p>
+            </div>
+            {% endfor %}
+        </div>
+    {% elif sorted_products %}
+        <div class="d-flex flex-row m-5">
+            {% for sorted_product in sorted_products %}
+            <div class="border border-black m-3" id="product-{{ sorted_product.pk }}">
+                <a href="{% url 'detail' sorted_product.pk %}"><p>{{sorted_product.name}}</p></a>
+                <p>${{sorted_product.price}}</p>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    {% if products %}
+	<div class="d-flex flex-row m-5">
+        {% for product in products %}
+        <!-- Single Product -->
+        <div class="border border-black m-3" id="product-{{ product.pk }}">
+            <a href="{% url 'detail' product.pk %}"><p>{{product.name}}</p></a>
+            <p>${{product.price}}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</body>
+</html>

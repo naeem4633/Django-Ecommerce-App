@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% for order_item in order_items %}
+    {{forloop.counter}}:
+    {{order_item.cartItem.product.name}} . 
+    {{order_item.order_status}}
+    {% endfor %}
+    <script>
+        window.onload = function() {
+            window.history.pushState("", "", "/");
+        }
+    </script>
+</body>
+</html>

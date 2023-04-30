@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div><a href="{% url 'cart' %}">Cart</a></div>
+    {{product.description}}
+
+    <form id="form{{product.id}}" method="post" action="{% url 'detail' pk=product.pk %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="action" id="action" value="">
+        <button type="submit" onclick="document.getElementById('action').value='cart'">Add to Cart</button>
+    </form>
+    <button type="submit" form="form{{product.id}}" onclick="document.getElementById('action').value='wishlist'">Add to Wishlist</button>
+</body>
+</html>
