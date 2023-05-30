@@ -6,17 +6,47 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 </head>
 <body>
-    <div><a href="{% url 'cart' %}">Cart</a></div>
-    {{product.description}}
-
+  <nav class="navbar navbar-expand-lg bg-body-tertiary border border-black bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand text-white" href="#">Product Details</a>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'index' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'cart' %}">Cart</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="d-flex flex-column flex-wrap m-5 bg-dark align-items-center">
+    <img src="../../static/images/product.jpg" class="img-fluid m-5" width="500px" height="500px" alt="Responsive image">
+      <div class="d-flex flex-row flex-wrap">
+        <p class="mx-5 text-white">{{product.name}}</p>
+        <p class="mx-5 text-white">${{product.price}}</p>
+      </div>
+    <p class="text-white">{{product.description}}</p>
     <form id="form{{product.id}}" method="post" action="{% url 'detail' pk=product.pk %}">
+      <div class="d-flex flex-column align-items-center">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="hidden" name="action" id="action" value="">
-        <button type="submit" onclick="document.getElementById('action').value='cart'">Add to Cart</button>
+        <div class="d-flex flex-row mb-3">
+          <button class="btn btn-light mx-2" type="submit" onclick="document.getElementById('action').value='cart'">Add to Cart</button>
+          <button class="btn btn-light mx-2" type="submit" onclick="document.getElementById('action').value='wishlist'">
+            <img src="../../static/images/heart.png" alt="" width="25px" height="25px">
+          </button>
+        </div>
+      </div>
     </form>
-    <button type="submit" form="form{{product.id}}" onclick="document.getElementById('action').value='wishlist'">Add to Wishlist</button>
+  </div>
 </body>
 </html>

@@ -9,58 +9,110 @@
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     {% load bootstrap5 %}
     {% bootstrap_css %}
+    <link href="{% static 'css/index.css' %}" rel="stylesheet" type="text/css">
     {% bootstrap_javascript %}
 </head>
 <body>
-    <div>
-        <a href="{% url 'cart' %}">Cart</a>
-        <a href="{% url 'wishlist' %}">Wishlist</a>
-    </div>  
-    <form action="{% url 'index' %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="search_form" value="true">
-        <input type="text" name="q" placeholder="Search products...">
-        <button type="submit">Search</button>
-    </form>
-    <form action="{% url 'index' %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="filter_form" value="true">
-        <label for="sort-by">Sort by:</label>
-        <select name="sort-by" id="sort-by">
-          <option value="low_to_high">Price: Low to high</option>
-          <option value="high_to_low">Price: High to low</option>
-        </select>
-        <button type="submit">Filter</button>
-      </form>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary border border-black bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand text-white" href="{% url 'index' %}">Product Listing</a>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'cart' %}">Cart</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'wishlist' %}">Wishlist</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+      <div class="d-flex justify-content-between mx-5 my-3">
+        <form action="{% url 'index' %}" method="post">
+          {% csrf_token %}
+          <div class="dropdown">
+            <a class="btn dropdown-toggle btn-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="../../static/images/filter-image.png" alt="" width="25px" height="25px">
+            </a>
+            <input type="hidden" name="filter_form" value="true">
+            <label for="sort-by"></label>
+            <ul class="dropdown-menu" name="sort-by" id="sort-by">
+              <li>
+                <button class="dropdown-item" name="sort-by" value="low_to_high" type="submit">Price: Low to high</button>
+              </li>
+              <li>
+                <button class="dropdown-item" name="sort-by" value="high_to_low" type="submit">Price: High to low</button>
+              </li>
+            </ul>
+          </div>
+        </form>
+        
+        <nav class="navbar bg-body-tertiary">
+          <div class="container-fluid">
+            <form class="d-flex" role="search" action="{% url 'index' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="search_form" value="true">
+              <input class="form-control me-2" name="q" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-dark" type="submit">Search</button>
+            </form>
+          </div>
+        </nav>
+      </div>
+
     {% if filtered_products %}
-        <div class="d-flex flex-row m-5">
+        <div class="d-flex flex-row justify-content-around mx-5 bg-dark">
             {% for filtered_product in filtered_products %}
-            <div class="border border-black m-3" id="product-{{ filtered_product.pk }}">
-                <a href="{% url 'detail' filtered_product.pk %}"><p>{{filtered_product.name}}</p></a>
-                <p>${{filtered_product.price}}</p>
+            <!-- Single Product -->
+            <div class="card" style="width: 18rem;" id="product-{{ filtered_product.pk }}">
+              <img src="../../static/images/product.jpg" class="card-img-top" alt="">
+              <div class="card-body">
+                  <a href="{% url 'detail' filtered_product.pk %}" class="text-decoration-none text-black">
+                    <div class="d-flex justify-content-between">
+                      <h5 class="card-title">{{filtered_product.name}}</h5>
+                      <p>${{filtered_product.price}}</p>
+                    </div>
+                  </a>
+              </div>
             </div>
             {% endfor %}
         </div>
     {% elif sorted_products %}
-        <div class="d-flex flex-row m-5">
+        <div class="d-flex flex-row justify-content-around mx-5 bg-dark">
             {% for sorted_product in sorted_products %}
-            <div class="border border-black m-3" id="product-{{ sorted_product.pk }}">
-                <a href="{% url 'detail' sorted_product.pk %}"><p>{{sorted_product.name}}</p></a>
-                <p>${{sorted_product.price}}</p>
+            <!-- Single Product -->
+            <div class="card" style="width: 18rem;" id="product-{{ sorted_product.pk }}">
+              <img src="../../static/images/product.jpg" class="card-img-top" alt="">
+              <div class="card-body">
+                  <a href="{% url 'detail' sorted_product.pk %}" class="text-decoration-none text-black">
+                    <div class="d-flex justify-content-between">
+                      <h5 class="card-title">{{sorted_product.name}}</h5>
+                      <p>${{sorted_product.price}}</p>
+                    </div>
+                  </a>
+              </div>
             </div>
             {% endfor %}
         </div>
     {% endif %}
-    
+   
     {% if products %}
-	<div class="d-flex flex-row m-5">
-        {% for product in products %}
-        <!-- Single Product -->
-        <div class="border border-black m-3" id="product-{{ product.pk }}">
-            <a href="{% url 'detail' product.pk %}"><p>{{product.name}}</p></a>
-            <p>${{product.price}}</p>
+    <div class="d-flex flex-wrap justify-content-around mx-5 bg-dark">
+      {% for product in products %}
+      <!-- Single Product -->
+      <div class="card m-5 border border-dark" style="width: 18rem;" id="product-{{ product.pk }}">
+        <img src="../../static/images/product.jpg" class="card-img-top" alt="">
+        <div class="card-body">
+          <a href="{% url 'detail' product.pk %}" class="text-decoration-none text-black">
+            <div class="d-flex justify-content-between">
+              <h5 class="card-title">{{product.name}}</h5>
+              <p>${{product.price}}</p>
+            </div>
+          </a>
         </div>
-        {% endfor %}
+      </div>
+      {% endfor %}
     </div>
     {% endif %}
 </body>
